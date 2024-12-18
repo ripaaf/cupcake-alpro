@@ -40,7 +40,9 @@ void updateAbsen(Absen daftarAbsen[], int jumlahAbsen) {
 
 void deleteAbsen(Absen daftarAbsen[], int& jumlahAbsen) {
     int index;
-    cout << "Masukkan nomor absen yang ingin dihapus: ";
+    cout << "\nMasukkan nomor absen yang ingin dihapus\n";
+    cout << "===============================\n";
+
     cin >> index;
     cin.ignore(); // Membersihkan buffer input
 
@@ -61,24 +63,45 @@ int main() {
     int pilihan;
 
     do {
-        cout << "\nProgram Absensi Sederhana\n";
-        cout << "1. Tambah Absen\n";
-        cout << "2. Tampilkan Absen\n";
-        cout << "3. Update Absen\n";
-        cout << "4. Hapus Absen\n";
-        cout << "5. Keluar\n";
+        cout << "\n";
+        cout << "|===============================|\n";
+        cout << "|   Program Absensi Sederhana   |\n";
+        cout << "|-------------------------------|\n";
+        cout << "| 1. Tambah Absen               |\n";
+        cout << "| 2. Tampilkan Absen            |\n";
+        cout << "| 3. Update Absen               |\n";
+        cout << "| 4. Hapus Absen                |\n";
+        cout << "| 5. Keluar                     |\n";
+        cout << "|===============================|\n\n";
         cout << "Pilihan: ";
         cin >> pilihan;
-        cin.ignore(); // Membersihkan buffer input
+        cin.ignore();
 
         if (pilihan == 1) {
             if (jumlahAbsen < MAX_ABSEN) {
+                cout << "\n";
                 cout << "Masukkan nama: ";
                 getline(cin, daftarAbsen[jumlahAbsen].nama);
-                cout << "Masukkan status (Hadir/Izin/Sakit/Alfa): ";
+                cout << "===============================\n";
+                cout << "Masukkan status\n";
+                cout << "1. Sakit\n2. Izin\n3. Hadir\n4. Alfa\n";
+                cout << "===============================\n";
+                cout << "Pilihan: ";
                 getline(cin, daftarAbsen[jumlahAbsen].status);
+                if (daftarAbsen[jumlahAbsen].status == "1") {
+                    daftarAbsen[jumlahAbsen].status = "Sakit";
+                } else if (daftarAbsen[jumlahAbsen].status == "2") {
+                    daftarAbsen[jumlahAbsen].status = "Izin";
+                } else if (daftarAbsen[jumlahAbsen].status == "3") {
+                    daftarAbsen[jumlahAbsen].status = "Hadir";
+                } else if (daftarAbsen[jumlahAbsen].status == "4") {
+                    daftarAbsen[jumlahAbsen].status = "Alfa";
+                } else{
+                    daftarAbsen[jumlahAbsen].status = "-";
+                }
+                
                 ++jumlahAbsen;
-                cout << "Absen berhasil ditambahkan!\n";
+                cout << "\nAbsen berhasil ditambahkan!\n";
             } else {
                 cout << "Kapasitas absen penuh.\n";
             }
@@ -108,5 +131,4 @@ int main() {
 
     } while (pilihan != 5);
 
-    return 0;
 }
