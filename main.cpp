@@ -55,7 +55,5 @@ int main() {
 
     } while (pilihan != 3);
 
-    return 0;
-
-
-adsad}
+    cout << "tes";
+}
