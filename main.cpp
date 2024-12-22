@@ -19,9 +19,7 @@ struct Absen {
 const int MAX_ABSEN = 100;
 
 void tampilkanAbsen(Absen daftarAbsen[], int jumlahAbsen) {
-    if (jumlahAbsen == 0)  {
-        return;
-    }
+    if (jumlahAbsen == 0) return;
 
     cout << "\n";
     cout << "+===============================+\n";
@@ -112,7 +110,6 @@ int main() {
         cout << "|===============================|\n\n";
         cout << RESET << "Pilihan: " << RESET;
         cin >> pilihan;
-
         cin.ignore();
         
         switch (pilihan) {
