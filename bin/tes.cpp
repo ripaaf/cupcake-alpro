@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <ctime>
 
 #define RESET "\033[0m"
 #define YELLOW "\033[33m"
@@ -13,32 +14,33 @@ struct Absen {
     string nama;
     string status; // "Hadir", "Izin", "Sakit", "Alfa"
     string nim;
-    // string waktu;
+    string waktu;
 };
 
 const int MAX_ABSEN = 100;
 
 void tampilkanAbsen(Absen daftarAbsen[], int jumlahAbsen) {
-    if (jumlahAbsen == 0)  {
+    if (jumlahAbsen == 0) {
         return;
     }
 
     cout << "\n";
-    cout << "+===============================+\n";
-    cout << YELLOW << "         Daftar Kehadiran       \n" << RESET;
-    cout << "+-------------------------------+\n";
-    cout << GREEN << " No.\tStatus\t\tNIM\t\t\tNama\n\n" << WHITE;
+    cout << "+===============================================+\n";
+    cout << YELLOW << "              Daftar Kehadiran               \n" << RESET;
+    cout << "+-----------------------------------------------+\n";
+    cout << GREEN << " No.\tNIM\t	Nama\t	Status\t	Waktu\n\n" << WHITE;
     for (int i = 0; i < jumlahAbsen; ++i) {
-        cout << " " << (i + 1) << "\t" << daftarAbsen[i].status << "\t\t" << daftarAbsen[i].nim << "\t\t" << daftarAbsen[i].nama << "\n";
+        cout << " " << (i + 1) << "\t" << daftarAbsen[i].nim << "\t" << daftarAbsen[i].nama 
+             << "\t" << daftarAbsen[i].status << "\t" << daftarAbsen[i].waktu << "\n";
     }
-    cout << RESET << "+-------------------------------+\n";
+    cout << RESET << "+-----------------------------------------------+\n";
 }
 
 void updateAbsen(Absen daftarAbsen[], int* jumlahAbsen) {
     int index;
     cout << "Masukkan nomor absen yang ingin diupdate: ";
     cin >> index;
-    cin.ignore(); 
+    cin.ignore();
 
     if (index > 0 && index <= *jumlahAbsen) {
         string namaBaru;
@@ -48,6 +50,7 @@ void updateAbsen(Absen daftarAbsen[], int* jumlahAbsen) {
         cout << GREEN << "\n*ENTER jika tidak ingin mengubah\n" << RESET;
         cout << "\nMasukkan nama baru: ";
         getline(cin, namaBaru);
+        
         cout << "Masukkan NIM baru: ";
         getline(cin, nimBaru);
 
@@ -58,15 +61,27 @@ void updateAbsen(Absen daftarAbsen[], int* jumlahAbsen) {
         cout << "\n";
         cout << "Pilihan: ";
         getline(cin, statusBaru);
+        if (statusBaru == "1") {
+            statusBaru = "Sakit";
+        } else if (statusBaru == "2") {
+            statusBaru = "Izin";
+        } else if (statusBaru == "3") {
+            statusBaru = "Hadir";
+        } else if (statusBaru == "4") {
+            statusBaru = "Alfa";
+        }
 
-        if (statusBaru == "1") {statusBaru = "Sakit";}
-        else if (statusBaru == "2") {statusBaru = "Izin";} 
-        else if (statusBaru == "3") {statusBaru = "Hadir";} 
-        else if (statusBaru == "4") {statusBaru = "Alfa";}
+        if (!namaBaru.empty()) {
+            daftarAbsen[index - 1].nama = namaBaru;
+        }
 
-        if (!namaBaru.empty()) daftarAbsen[index - 1].nama = namaBaru;
-        if (!statusBaru.empty()) daftarAbsen[index - 1].status = statusBaru;
-        if (!nimBaru.empty()) daftarAbsen[index - 1].nim = nimBaru;
+        if (!nimBaru.empty()) {
+            daftarAbsen[index - 1].nim = nimBaru;
+        }
+
+        if (!statusBaru.empty()) {
+            daftarAbsen[index - 1].status = statusBaru;
+        }
 
         cout << "\nAbsen berhasil diupdate!\n";
     } else {
@@ -91,6 +106,14 @@ void deleteAbsen(Absen daftarAbsen[], int& jumlahAbsen) {
     }
 }
 
+string getCurrentTime() {
+    time_t now = time(0);
+    tm* ltm = localtime(&now);
+    char buffer[20];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ltm);
+    return string(buffer);
+}
+
 int main() {
     Absen daftarAbsen[MAX_ABSEN];
     int jumlahAbsen = 0;
@@ -98,44 +121,53 @@ int main() {
 
     do {
         cout << WHITE << "\n";
-        if (jumlahAbsen == 0){
-        cout << "|===============================|\n";
-        cout << "|        " << YELLOW << "Program Absensi" << WHITE << "        |\n";
-        cout << "|-------------------------------|\n";
+        if (jumlahAbsen == 0) {
+            cout << "|================================|\n";
+            cout << "|        " << YELLOW << "Program Absensi" << WHITE << "        |\n";
+            cout << "|--------------------------------|\n";
         }
         tampilkanAbsen(daftarAbsen, jumlahAbsen);
         cout << "| 1. " << LIGHT_BLUE << "Tambah Absen" << WHITE << "               |\n";
-        // cout << "| 2. " << LIGHT_BLUE << "Tampilkan Absen" << WHITE << "            |\n";
         cout << "| 2. " << LIGHT_BLUE << "Update Absen" << WHITE << "               |\n";
         cout << "| 3. " << LIGHT_BLUE << "Hapus Absen" << WHITE << "                |\n";
         cout << "| 4. " << LIGHT_BLUE << "Keluar" << WHITE << "                     |\n";
-        cout << "|===============================|\n\n";
+        cout << "|================================|\n\n";
         cout << RESET << "Pilihan: " << RESET;
         cin >> pilihan;
 
         cin.ignore();
-        
+
         switch (pilihan) {
             case 1:
                 if (jumlahAbsen < MAX_ABSEN) {
                     cout << "\n";
                     cout << "Masukkan nama: ";
                     getline(cin, daftarAbsen[jumlahAbsen].nama);
+
                     cout << "Masukkan NIM: ";
                     getline(cin, daftarAbsen[jumlahAbsen].nim);
+
                     cout << "===============================\n";
                     cout << YELLOW <<"        Masukkan status        \n\n" << WHITE;
                     cout << "1." << LIGHT_BLUE << " Sakit" << WHITE <<"\t2." << LIGHT_BLUE <<" Izin" << WHITE <<"\n3." <<
-                     LIGHT_BLUE <<" Hadir\t" << WHITE <<"4."<< LIGHT_BLUE << " Alfa\n" << RESET;
+                        LIGHT_BLUE <<" Hadir\t" << WHITE <<"4."<< LIGHT_BLUE << " Alfa\n" << RESET;
                     cout << "\n";
                     cout << "Pilihan: ";
                     getline(cin, daftarAbsen[jumlahAbsen].status);
 
-                    if (daftarAbsen[jumlahAbsen].status == "1") daftarAbsen[jumlahAbsen].status = "Sakit";
-                    else if (daftarAbsen[jumlahAbsen].status == "2") daftarAbsen[jumlahAbsen].status = "Izin";
-                    else if (daftarAbsen[jumlahAbsen].status == "3") daftarAbsen[jumlahAbsen].status = "Hadir";
-                    else if (daftarAbsen[jumlahAbsen].status == "4") daftarAbsen[jumlahAbsen].status = "Alfa";
-                    else daftarAbsen[jumlahAbsen].status = "-";
+                    if (daftarAbsen[jumlahAbsen].status == "1") {
+                        daftarAbsen[jumlahAbsen].status = "Sakit";
+                    } else if (daftarAbsen[jumlahAbsen].status == "2") {
+                        daftarAbsen[jumlahAbsen].status = "Izin";
+                    } else if (daftarAbsen[jumlahAbsen].status == "3") {
+                        daftarAbsen[jumlahAbsen].status = "Hadir";
+                    } else if (daftarAbsen[jumlahAbsen].status == "4") {
+                        daftarAbsen[jumlahAbsen].status = "Alfa";
+                    } else {
+                        daftarAbsen[jumlahAbsen].status = "-";
+                    }
+
+                    daftarAbsen[jumlahAbsen].waktu = getCurrentTime();
 
                     ++jumlahAbsen;
                     cout <<"\nAbsen berhasil ditambahkan!\n";
@@ -143,14 +175,6 @@ int main() {
                     cout << "Kapasitas absen penuh.\n";
                 }
                 break;
-
-            // case 2:
-            //     if (jumlahAbsen == 0) {
-            //         cout << YELLOW << "\nBelum ada data absensi.\n" << RESET;
-            //     } else {
-            //         tampilkanAbsen(daftarAbsen, jumlahAbsen);
-            //     }
-            //     break;
 
             case 2:
                 if (jumlahAbsen == 0) {
