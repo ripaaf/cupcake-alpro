@@ -22,6 +22,7 @@ void tampilkanAbsen(Absen daftarAbsen[], int jumlahAbsen) {
     }
 
     cout << "\n";
+    cout << "+===============================+\n";
     cout << YELLOW << "         Daftar Kehadiran       \n" << RESET;
     cout << "+-------------------------------+\n";
     cout << GREEN << " No.\tNama\t\tStatus\n\n" << WHITE;
@@ -114,6 +115,7 @@ int main() {
         cout << "|===============================|\n\n";
         cout << RESET << "Pilihan: " << RESET;
         cin >> pilihan;
+
         cin.ignore();
         
         switch (pilihan) {
