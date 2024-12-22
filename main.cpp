@@ -182,5 +182,5 @@ int main() {
                 break;
         }
 
-    } while (pilihan != 5);
+    } while (pilihan != 4);
 }
